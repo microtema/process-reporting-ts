@@ -23,6 +23,8 @@
   ```
 * @BpmnElement
   ```
+    import {BpmnElement} from "./BpmnElement";
+  
     @BpmnElement(id = "Event_1anjljr", startEvent = true, keyExpression = "{{PO_NUMBER}}")
     public execute(PurchaseOrderEvent event) {
 
