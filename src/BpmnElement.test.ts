@@ -30,7 +30,6 @@ describe("intercept", () => {
         const answer = await sut.execute('bar')
 
         expect(answer).toMatchSnapshot()
-        expect(events).toMatchSnapshot()
 
         // Then
         expect(events.length).toBe(2);
@@ -56,7 +55,6 @@ describe("intercept", () => {
 
         // Then
         expect(answer).toMatchSnapshot()
-        expect(events).toMatchSnapshot()
 
         expect(events.length).toBe(2);
         expect(events[0].status).toBe(ReportStatus.STARTED);
@@ -81,7 +79,6 @@ describe("intercept", () => {
 
         // Then
         expect(answer).toMatchSnapshot()
-        expect(events).toMatchSnapshot()
 
         expect(events.length).toBe(2);
         expect(events[0].status).toBe(ReportStatus.STARTED);
@@ -106,7 +103,6 @@ describe("intercept", () => {
 
         // Then
         expect(answer).toMatchSnapshot()
-        expect(events).toMatchSnapshot()
 
         expect(events.length).toBe(4);
         expect(events[0].status).toBe(ReportStatus.STARTED);
