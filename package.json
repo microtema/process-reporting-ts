@@ -1,0 +1,41 @@
+{
+  "name": "process-reporting-ts",
+  "version": "1.0.0",
+  "description": "Process reporting with typescript",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microtema/process-reporting-ts.git"
+  },
+  "keywords": [
+    "AOP",
+    "Typescript",
+    "NPM",
+    "Open-Source",
+    "Process-Reporting"
+  ],
+  "author": "microtema@web.de",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/microtema/process-reporting-ts/issues"
+  },
+  "homepage": "https://github.com/microtema/process-reporting-ts#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.8",
+    "@types/mustache": "^4.2.5",
+    "@types/uuid": "^9.0.7",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "axios-observable": "^2.0.0",
+    "mustache": "^4.2.0",
+    "test": "^3.3.0",
+    "uuid": "^9.0.1"
+  }
+}
