@@ -64,7 +64,7 @@ export function BpmnElement(options: BpmnElementOptions): DecoratorFunction {
 
 function publishEvent(options: BpmnElementOptions, reportEvent: ReportEvent) {
 
-    reportEvent.elementId = options.bpmnElementId
+    reportEvent.elementId = options.id
 
     if (options.processId) {
         reportEvent.processId = options.processId

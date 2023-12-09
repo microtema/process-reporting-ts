@@ -1,11 +1,14 @@
 {
   "name": "process-reporting-ts",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Process reporting with typescript",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": ["/lib"],
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "prepublish": "npm run build build"
   },
   "repository": {
     "type": "git",

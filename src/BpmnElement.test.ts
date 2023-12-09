@@ -13,12 +13,18 @@ describe("intercept", () => {
         events.length = 0
     })
 
+    test('should work', () => {
+
+       // @BpmnElement({id: 'StartEvent_1', startEvent: true})
+        function foo()  {}
+    })
+
     test('should be COMPLETED', async () => {
 
         // Given
         class Service {
 
-            @BpmnElement({bpmnElementId: 'StartEvent_1', startEvent: true})
+            @BpmnElement({id: 'StartEvent_1', startEvent: true})
             execute(foo: string): Record<string, string> {
                 return {key: "foo", value: foo}
             }
@@ -42,7 +48,7 @@ describe("intercept", () => {
         // Given
         class Service {
 
-            @BpmnElement({bpmnElementId: 'StartEvent_1'})
+            @BpmnElement({id: 'StartEvent_1'})
             execute(foo: string): string {
                 throw new Error("Unable to execute!")
             }
@@ -66,7 +72,7 @@ describe("intercept", () => {
         // Given
         class Service {
 
-            @BpmnElement({bpmnElementId: 'StartEvent_1', suppressException: true})
+            @BpmnElement({id: 'StartEvent_1', suppressException: true})
             execute(foo: string): string {
                 throw new Error("Unable to convert!")
             }
@@ -90,7 +96,7 @@ describe("intercept", () => {
         // Given
         class Service {
 
-            @BpmnElement({bpmnElementId: 'StartEvent_1', retries: 2})
+            @BpmnElement({id: 'StartEvent_1', retries: 2})
             execute(foo: string): string {
                 throw new Error("Unable to convert!")
             }
@@ -115,7 +121,7 @@ describe("intercept", () => {
 
         // Given
         class Service {
-            @BpmnElement({bpmnElementId: 'StartEvent_1', startEvent: true, keyExpression: '{{data.ID}}'})
+            @BpmnElement({id: 'StartEvent_1', startEvent: true, keyExpression: '{{data.ID}}'})
             execute(data: any, convert: boolean) {
 
                 return convert ? data.ID : null

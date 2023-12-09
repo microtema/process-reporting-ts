@@ -37,7 +37,7 @@ export function getParameters(func: Function) {
 
 export function getReferenceId(payload: any, keyExpression?: string) {
 
-   // console.log("keyExpression: ", keyExpression, payload)
+   console.log("keyExpression: ", keyExpression, payload)
 
     if (!payload) {
         return null;

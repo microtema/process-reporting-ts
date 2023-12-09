@@ -91,7 +91,7 @@ export interface ReportEvent {
 }
 
 export interface BpmnElementOptions {
-    bpmnElementId: string,
+    id: string,
     processId?: string,
     retries?: number,
     delay?: number,
