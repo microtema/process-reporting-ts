@@ -60,8 +60,8 @@ function execute(PurchaseOrderEvent data) {
 
 const aopHandler = interceptHandler(execute, {
     startEvent: true,
-    instanceIdExpression: '{{ data.PO_NUMBER }}',
-    keyExpression: '{{ input }}'
+    instanceIdExpression: '{{ headers.TX_ID }}',
+    keyExpression: '{{ data.PO_NUMBER }}'
 })
 
 ```
