@@ -1,20 +1,19 @@
-import {BpmnElement} from './BpmnElement'
-import {ReportEvent, ReportStatus} from './models'
+import activityHandler from './aop'
+import {ReportEvent, ReportStatus} from "./models";
 import axios from 'axios'
 
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>
 
+describe("Intercept on function", () => {
 
-describe('Intercept on class method', () => {
-
-    const events: ReportEvent[] = []
+    const events:ReportEvent[] = []
 
     beforeEach(() => {
 
         events.length = 0
 
-        mockedAxios.post.mockImplementation((url: string, data: any) => {
+        mockedAxios.post.mockImplementation((url:string, data:any) => {
             events.push(data)
             return Promise.resolve(data)
         })
@@ -30,32 +29,27 @@ describe('Intercept on class method', () => {
         jest.resetAllMocks();
     });
 
-    test('should be COMPLETED', async () => {
+    test('should complete', async () => {
 
-        // Given
-        class Service {
+        const fn = function StartEvent_1(input:any) {
 
-            @BpmnElement({
-                id: 'StartEvent_1',
-                startEvent: true,
-                instanceIdExpression: '{{ input }}',
-                keyExpression: '{{ input }}'
-            })
-            execute(input: string): Record<string, string> {
-                return {output: input}
-            }
+            return {output: input}
         }
 
-        const sut = new Service();
+        const sut = activityHandler(fn, {
+            startEvent: true,
+            instanceIdExpression: '{{ input }}',
+            keyExpression: '{{ input }}'
+        })
+
+        // GIven
         const input = 'foo'
 
-        // When
-        const answer = await sut.execute(input)
+        const answer = await sut(input)
 
         expect(answer).toEqual({output: input})
 
-        // Then
-        expect(events.length).toBe(2);
+        expect(events.length).toEqual(2)
         expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:8080/reporting-service/rest/api/report', events[0])
         expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:8080/reporting-service/rest/api/report', events[1])
 
@@ -75,7 +69,6 @@ describe('Intercept on class method', () => {
         expect(events[0].eventTime).toBeDefined()
         expect(events[0].startedBy).toEqual('system')
 
-
         expect(events[1].status).toEqual(ReportStatus.COMPLETED)
         expect(events[1].payload).toEqual(JSON.stringify({output: input}))
         expect(events[1].elementId).toEqual('StartEvent_1')
@@ -93,33 +86,28 @@ describe('Intercept on class method', () => {
         expect(events[1].startedBy).toEqual('system')
     })
 
-    test('should be ERROR', async () => {
+    test('should terminate', async () => {
 
-        // Given
-        class Service {
+        const fn = function StartEvent_1(message:string) {
 
-            @BpmnElement({
-                id: 'StartEvent_1',
-                endEvent: true,
-                instanceIdExpression: '{{ message }}',
-                keyExpression: '{{ message }}'
-            })
-            execute(message: string): string {
-                throw new Error('Business Error')
-            }
+            throw new Error('Business Error')
         }
 
-        const sut = new Service();
+        const sut = activityHandler(fn, {
+            endEvent: true,
+            instanceIdExpression: '{{ message }}',
+            keyExpression: '{{ message }}'
+        })
+
+        // GIven
         const message = 'foo'
 
-        // When
         try {
-            await sut.execute('foo')
-        } catch (e) {
+            await sut(message)
+        }catch (e) {
             expect(e).toEqual(new Error('Business Error'))
         }
 
-        // Then
         expect(events.length).toEqual(2)
         expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:8080/reporting-service/rest/api/report', events[0])
         expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:8080/reporting-service/rest/api/report', events[1])
@@ -156,5 +144,4 @@ describe('Intercept on class method', () => {
         expect(events[1].eventTime).toBeDefined()
         expect(events[1].startedBy).toEqual('system')
     })
-});
-
+})

@@ -1,10 +1,34 @@
 export enum ReportStatus {
+    /**
+     * Process/Activity has been queued
+     */
     QUEUED = 'QUEUED',
+    /**
+     * Process/Activity has been started
+     */
     STARTED = 'STARTED',
+    /**
+     * Process/Activity has been restarted
+     */
     RESTARTED = 'RESTARTED',
+    /**
+     * Process/Activity has been completed
+     */
     COMPLETED = 'COMPLETED',
+    /**
+     * Process/Activity has been terminated and should be deleted
+     */
+    TERMINATED = 'TERMINATED',
+
+    PROCESS_COMPLETED = 'PROCESS_COMPLETED',
+    /**
+     * Process/Activity has warning, but will not stop the process
+     */
     WARNING = 'WARNING',
-    ERROR = 'ERROR'
+    /**
+     * Process/Activity has error and the process will be terminated
+     */
+    ERROR = 'ERROR',
 }
 
 export interface ReportEvent {
@@ -78,7 +102,7 @@ export interface ReportEvent {
     /**
      * Serialized JSON payload
      */
-    payload: string;
+    payload?: string;
 
     /**
      * Event meta information
@@ -91,14 +115,18 @@ export interface ReportEvent {
 }
 
 export interface BpmnElementOptions {
-    id: string,
+    maskParams?: Record<string, string | Function>
+    id?: string,
     processId?: string,
+    multipleInstance?: string,
     retries?: number,
     delay?: number,
     suppressException?: boolean,
     startEvent?: boolean,
     endEvent?: boolean,
-    keyExpression?:string
+    instanceIdExpression?: string
+    keyExpression?: string
+    transactionIdExpression?: string
 }
 
 export interface ProcessReportingConfiguration {

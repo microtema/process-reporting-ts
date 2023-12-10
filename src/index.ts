@@ -1,16 +1,11 @@
-import {BpmnElement} from './BpmnElement';
-import {getParameters, waitFor, getReferenceId} from './util';
-import {ReportEvent, ReportStatus, BpmnElementOptions, EventData} from './models';
-import {ProcessReportingService} from './process-reporting-service';
+import {BpmnElement} from './BpmnElement'
+import {maskPassword, maskBinary} from './util'
+import { BpmnElementOptions} from './models'
+import activityInterceptor from './aop'
 
 export {
     BpmnElement,
-    ReportStatus,
-    ReportEvent,
-    EventData,
     BpmnElementOptions,
-    ProcessReportingService,
-    getParameters,
-    waitFor,
-    getReferenceId
+    activityInterceptor,
+    maskPassword, maskBinary
 }

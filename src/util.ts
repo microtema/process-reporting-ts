@@ -6,6 +6,25 @@ export function waitFor(delayInMs: number) {
     return new Promise(resolve => setTimeout(resolve, delayInMs));
 }
 
+export function parseExpression(expression: string | undefined, payload: any): string | null {
+
+    if (!expression) {
+        return null;
+    }
+
+    if (!payload) {
+        return null;
+    }
+
+    let context = payload;
+
+    if (payload instanceof Array) {
+        context = {"items": payload};
+    }
+
+    return Mustache.render(expression, context)
+}
+
 export function getParameters(func: Function) {
 
     const str: string = func.toString();
@@ -32,26 +51,59 @@ export function getParameters(func: Function) {
         parameters[index] = parameters[index].replace('...', '')
     }
 
-    return parameters;
+    return parameters
 }
 
-export function getReferenceId(payload: any, keyExpression?: string) {
+export function getPayload(parameterNames: string[], methodArguments: any[]) {
 
-   console.log("keyExpression: ", keyExpression, payload)
+    const payload: Record<string, any> = {}
+
+    for (let index = 0; index < parameterNames.length; index++) {
+
+        const param = parameterNames[index]
+
+        payload[param] = methodArguments[index]
+    }
+
+    return payload;
+}
+
+export function serializePayload(payload: any, maskProperties: Record<string, string | Function> | undefined) {
 
     if (!payload) {
-        return null;
+        return payload
     }
 
-    if (!keyExpression) {
-        return null;
+    if (typeof payload === 'string') {
+        return payload
     }
 
-    let context = payload;
+    if (!maskProperties) {
 
-    if (payload instanceof Array) {
-        context = {"items": payload};
+        return JSON.stringify(payload)
     }
 
-    return Mustache.render(keyExpression, context)
+    return JSON.stringify(payload, (k, v) => {
+
+        if (!maskProperties.hasOwnProperty(k)) {
+
+            return v
+        }
+
+        const mask = maskProperties[k]
+
+        if (typeof mask === 'function') {
+            return mask(v)
+        }
+
+        return mask
+    })
+}
+
+export function maskPassword(pwd: string | undefined | null) {
+    return pwd !== undefined ? '*****' : pwd
+}
+
+export function maskBinary(binary: any[] | undefined | null) {
+    return binary ? 'bytes [' + binary.length + ']' : binary
 }
