@@ -7,7 +7,7 @@
 
 ![Event Reporting Workflow](Resources/reporting-service-building-block.png)
 
-![Event Reporting Porcess View](Resources/reporting-01.png)
+![Event Reporting Process View](Resources/reporting-01.png)
 
 ![Event Reporting Instance View](Resources/reporting-02.png)
 
@@ -23,11 +23,11 @@
   ```
     npm install process-reporting-ts
   ```
-* @BpmnElement
+* @BpmnElement on method
   ```
-    import {BpmnElement} from "./BpmnElement";
+    import {BpmnElement} from "process-reporting-ts";
   
-    @BpmnElement(id = "Event_1anjljr", startEvent = true, keyExpression = "{{PO_NUMBER}}")
+    @BpmnElement(id = "Event_1anjljr", startEvent = true, keyExpression = "{{ event.PO_NUMBER }}")
     public execute(PurchaseOrderEvent event) {
 
         return ...;
@@ -49,6 +49,23 @@
         return ...;
     }
   ```
+* AOP on function
+```
+import {interceptHandler} from "process-reporting-ts";
+
+function execute(PurchaseOrderEvent data) {
+
+   return ...
+}
+
+const aopHandler = interceptHandler(execute, {
+    startEvent: true,
+    instanceIdExpression: '{{ data.PO_NUMBER }}',
+    keyExpression: '{{ input }}'
+})
+
+```
+
 * .env
   ```
   REPORTING_PROCESS_ID: Process_0e2hw2v

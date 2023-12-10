@@ -1,4 +1,4 @@
-import activityHandler from './aop'
+import interceptHandler from './aop'
 import {ReportEvent, ReportStatus} from "./models";
 import axios from 'axios'
 
@@ -36,7 +36,7 @@ describe("Intercept on function", () => {
             return {output: input}
         }
 
-        const sut = activityHandler(fn, {
+        const sut = interceptHandler(fn, {
             startEvent: true,
             instanceIdExpression: '{{ input }}',
             keyExpression: '{{ input }}'
@@ -93,7 +93,7 @@ describe("Intercept on function", () => {
             throw new Error('Business Error')
         }
 
-        const sut = activityHandler(fn, {
+        const sut = interceptHandler(fn, {
             endEvent: true,
             instanceIdExpression: '{{ message }}',
             keyExpression: '{{ message }}'
