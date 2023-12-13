@@ -31,12 +31,12 @@ describe("Intercept on function", () => {
 
     test('should complete', async () => {
 
-        const fn = function StartEvent_1(input:any) {
+        function StartEvent_1(input:any) {
 
             return {output: input}
         }
 
-        const sut = interceptHandler(fn, {
+        const sut = interceptHandler<Function>(StartEvent_1, {
             startEvent: true,
             instanceIdExpression: '{{ input }}',
             keyExpression: '{{ input }}'
@@ -88,12 +88,12 @@ describe("Intercept on function", () => {
 
     test('should terminate', async () => {
 
-        const fn = function StartEvent_1(message:string) {
+        function StartEvent_1(message:string) {
 
             throw new Error('Business Error')
         }
 
-        const sut = interceptHandler(fn, {
+        const sut = interceptHandler<Function>(StartEvent_1, {
             endEvent: true,
             instanceIdExpression: '{{ message }}',
             keyExpression: '{{ message }}'
@@ -143,5 +143,64 @@ describe("Intercept on function", () => {
         expect(events[1].executionId).toBeDefined()
         expect(events[1].eventTime).toBeDefined()
         expect(events[1].startedBy).toEqual('system')
+    })
+
+    test('should complete a process', async () => {
+
+        const data = {input: 'start', instanceId: '123456789', referenceId: 'client-123'}
+
+        function StartEvent_1(data:any) {
+
+            return {...data}
+        }
+
+        let handler = interceptHandler<Function>(StartEvent_1, {
+            startEvent: true,
+            instanceIdExpression: '{{ data.instanceId }}',
+            keyExpression: '{{ data.referenceId }}'
+        })
+
+        // Given
+        await handler(data)
+
+         function Service_Task_1(data:any) {
+
+            return {...data}
+        }
+
+         handler = interceptHandler<Function>(Service_Task_1, {
+             instanceIdExpression: '{{ data.instanceId }}',
+             keyExpression: '{{ data.referenceId }}'
+        })
+
+        // Given
+        await handler(data)
+
+         function EndEvent_1(data:any) {
+
+            return {message:data.message}
+        }
+
+         handler = interceptHandler<Function>(EndEvent_1, {
+            endEvent: true,
+             instanceIdExpression: '{{ data.instanceId }}',
+             keyExpression: '{{ data.referenceId }}'
+        })
+
+        // Given
+        await handler({...data, ...{message:'message'}})
+
+        expect(events.length).toEqual(6)
+
+        events.forEach(it =>  expect(mockedAxios.post).toHaveBeenCalledWith('http://localhost:8080/reporting-service/rest/api/report', it))
+
+        expect(events[0].status).toEqual(ReportStatus.STARTED)
+        expect(events[1].status).toEqual(ReportStatus.COMPLETED)
+
+        expect(events[2].status).toEqual(ReportStatus.STARTED)
+        expect(events[3].status).toEqual(ReportStatus.COMPLETED)
+
+        expect(events[4].status).toEqual(ReportStatus.STARTED)
+        expect(events[5].status).toEqual(ReportStatus.PROCESS_COMPLETED)
     })
 })

@@ -6,7 +6,7 @@ export function waitFor(delayInMs: number) {
     return new Promise(resolve => setTimeout(resolve, delayInMs));
 }
 
-export function parseExpression(expression: string | undefined, payload: any): string | null {
+export function parseExpression(expression: string | Function | undefined, payload: any): string | null {
 
     if (!expression) {
         return null;
@@ -20,6 +20,10 @@ export function parseExpression(expression: string | undefined, payload: any): s
 
     if (payload instanceof Array) {
         context = {"items": payload};
+    }
+
+    if (typeof expression === 'function') {
+        return expression(context)
     }
 
     return Mustache.render(expression, context)
@@ -40,6 +44,7 @@ export function getParameters(func: Function) {
     }
 
     const paramsString = str.substring(startBracket + 1, endBracket);
+
     if (paramsString.length === 0) {
         return [];
     }
@@ -47,8 +52,17 @@ export function getParameters(func: Function) {
     const parameters = paramsString.split(',').map(e => e.trim());
 
     for (let index = 0; index < parameters.length; index++) {
-        parameters[index] = parameters[index].split(' ')[0]
-        parameters[index] = parameters[index].replace('...', '')
+
+        let param = parameters[index]
+
+        param = param.replace('...', '')
+        param = param.replace('{', '')
+        param = param.replace('}', '')
+        param = param.trim()
+
+        if (param) {
+            parameters[index] = param
+        }
     }
 
     return parameters

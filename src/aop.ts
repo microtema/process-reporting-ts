@@ -1,4 +1,3 @@
-import * as Mustache from 'mustache'
 import {fnDecorator} from 'pure-function-decorator'
 import axios from 'axios'
 import {v4 as uuidv4} from 'uuid'
@@ -13,7 +12,7 @@ export const descriptorFunction = (origFunction: Function, bpmnElementOptions: B
      * NOTE: It's very important here we do not use arrow function otherwise 'this' will be messed up due
      * to the nature how arrow function defines this inside.
      */
-    return (async function(...args: []) {
+    return (async function (...args: []) {
 
         const params = getParameters(origFunction)
         const payload = getPayload(params, args)
@@ -90,6 +89,12 @@ export function publishEvent(reportEvent: ReportEvent, bpmnElementOptions: BpmnE
         reportEvent.status = ReportStatus.PROCESS_COMPLETED
     }
 
+    const {transactionId} = reportEvent
+
+    const [parentTransactionId] = transactionId.split(':')
+
+    reportEvent.transactionId = parentTransactionId
+
     fireEvent(reportEvent)
 }
 
@@ -110,7 +115,7 @@ export const fireEvent = (event: ReportEvent) => {
 }
 
 
-export default (activityHandler: any, options?: BpmnElementOptions) => {
+export default <T>(activityHandler: any, options?: BpmnElementOptions):T => {
 
     activities[activityHandler.name] = options || {id: activityHandler.name}
 
@@ -118,5 +123,5 @@ export default (activityHandler: any, options?: BpmnElementOptions) => {
     activities[activityHandler.name].id = activities[activityHandler.name].id || activityHandler.name
     activities[activityHandler.name].instanceIdExpression = activities[activityHandler.name].instanceIdExpression || '{{ context.triggerMetadata.instanceId }}'
 
-    return fnDecorator(activityInterceptor, activityHandler)
+    return fnDecorator(activityInterceptor, activityHandler) as T
 }

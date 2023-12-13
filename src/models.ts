@@ -116,38 +116,29 @@ export interface ReportEvent {
 
 export interface BpmnElementOptions {
     maskParams?: Record<string, string | Function>
-    id?: string,
-    processId?: string,
-    multipleInstance?: string,
-    retries?: number,
-    delay?: number,
-    suppressException?: boolean,
-    startEvent?: boolean,
-    endEvent?: boolean,
-    instanceIdExpression?: string
-    keyExpression?: string
-    transactionIdExpression?: string
+    id?: string
+    processId?: string
+    multipleInstance?: string
+    retries?: number
+    delay?: number
+    suppressException?: boolean
+    startEvent?: boolean
+    endEvent?: boolean
+    instanceIdExpression?: string | Function
+    keyExpression?: string | Function
+    transactionIdExpression?: string | Function
 }
 
 export interface ProcessReportingConfiguration {
-
-    disabled: boolean;
-
-    processId: string;
-
-    processName: string;
-
-    processDescription: string;
-
-    retentionTime: string;
-
-    processVersion: string;
-
-    server: string;
-
-    maxEventContentLimit: number;//2000;
-
-    startElementId: string;
+    disabled: boolean
+    processId: string
+    processName: string
+    processDescription: string
+    retentionTime: string
+    processVersion: string
+    server: string
+    maxEventContentLimit: number //2000;
+    startElementId: string
 }
 
 export interface EventData {
@@ -159,47 +150,47 @@ export interface EventData {
     /**
      * Who trigger the event, [user, technical-user, machine, ...]
      */
-    eventTriggeredBy: string,
+    eventTriggeredBy: string
 
     /**
      * Category of event, [user, invoice, billing, ...]
      */
-    eventCategory: string,
+    eventCategory: string
 
     /**
      * Version of Event
      */
-    eventVersion: string,
+    eventVersion: string
 
     /**
      * Timestamp of event
      */
-    eventTriggeredAt: Date,
+    eventTriggeredAt: Date
 
     /**
      * Name of event, [UserCreated, UserDeleted, UserUpdated, ...]
      */
-    eventName: string,
+    eventName: string
 
     /**
      * JSON as String to be converted to generic type, or any generic type that is serializable
      */
-    eventAttachment: any,
+    eventAttachment: any
 
     /**
      * JSON as String to be converted to generic type, or any generic type that is serializable
      */
-    eventPayload: any,
+    eventPayload: any
 
     /**
      * Origin of event, [application-a, system-b, component-c]
      */
-    eventOrigin: string,
+    eventOrigin: string
 
     /**
      * Technical meta information of retry the same event
      */
-    eventRetryCount: number,
+    eventRetryCount: number
 
     /**
      * Unique execution id of event, same event id may have different execution id
