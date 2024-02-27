@@ -20,6 +20,7 @@ export const descriptorFunction = (origFunction: Function, bpmnElementOptions: B
         const transactionId = parseExpression(bpmnElementOptions.instanceIdExpression, payload)
         const referenceId = parseExpression(bpmnElementOptions.keyExpression, payload)
         const multipleInstanceIndex = parseExpression(bpmnElementOptions.multipleInstance, payload)
+        const startedBy = parseExpression(bpmnElementOptions.startedByExpression, payload)
         const retryCount = 0
 
         const reportEvent = {
@@ -27,7 +28,8 @@ export const descriptorFunction = (origFunction: Function, bpmnElementOptions: B
             referenceId: referenceId,
             status: ReportStatus.STARTED,
             transactionId: transactionId,
-            multipleInstanceIndex: (multipleInstanceIndex || 0) + '.' + (retryCount || 0)
+            multipleInstanceIndex: (multipleInstanceIndex || 0) + '.' + (retryCount || 0),
+            startedBy
         } as ReportEvent
 
         publishEvent(reportEvent, bpmnElementOptions)
@@ -108,7 +110,7 @@ export const fireEvent = (event: ReportEvent) => {
 
     event.eventTime = new Date()
     event.processVersion = process.env.REPORTING_PROCESS_VERSION as string
-    event.startedBy = 'system'
+    event.startedBy = event.startedBy || 'system'
 
     axios.post(url, event)
         .catch(it => console.log('Unable to post Process [' + event.processId + '] event [' + event.elementId + ']!'))
@@ -122,6 +124,7 @@ export default <T>(activityHandler: any, options?: BpmnElementOptions):T => {
     // override id from function name
     activities[activityHandler.name].id = activities[activityHandler.name].id || activityHandler.name
     activities[activityHandler.name].instanceIdExpression = activities[activityHandler.name].instanceIdExpression || '{{ context.triggerMetadata.instanceId }}'
+    activities[activityHandler.name].startedByExpression = activities[activityHandler.name].startedByExpression || '{{ context.triggerMetadata.startedBy }}'
 
     return fnDecorator(activityInterceptor, activityHandler) as T
 }

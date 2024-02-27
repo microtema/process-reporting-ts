@@ -126,6 +126,7 @@ export interface BpmnElementOptions {
     endEvent?: boolean
     instanceIdExpression?: string | Function
     keyExpression?: string | Function
+    startedByExpression?: string | Function
     transactionIdExpression?: string | Function
 }
 
