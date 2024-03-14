@@ -102,6 +102,7 @@ describe('Intercept on class method', () => {
                 id: 'StartEvent_1',
                 endEvent: true,
                 instanceIdExpression: '{{ message }}',
+                startedByExpression: '{{ message }}',
                 keyExpression: '{{ message }}'
             })
             execute(message: string): string {
@@ -138,7 +139,7 @@ describe('Intercept on class method', () => {
         expect(events[0].processVersion).toEqual(process.env.REPORTING_PROCESS_VERSION)
         expect(events[0].executionId).toBeDefined()
         expect(events[0].eventTime).toBeDefined()
-        expect(events[0].startedBy).toEqual('system')
+        expect(events[0].startedBy).toEqual('foo')
 
         expect(events[1].status).toEqual(ReportStatus.ERROR)
         expect(events[1].payload).not.toBeDefined()
@@ -154,7 +155,7 @@ describe('Intercept on class method', () => {
         expect(events[1].processVersion).toEqual(process.env.REPORTING_PROCESS_VERSION)
         expect(events[1].executionId).toBeDefined()
         expect(events[1].eventTime).toBeDefined()
-        expect(events[1].startedBy).toEqual('system')
+        expect(events[1].startedBy).toEqual('foo')
     })
 });
 

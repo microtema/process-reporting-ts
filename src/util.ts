@@ -121,3 +121,7 @@ export function maskPassword(pwd: string | undefined | null) {
 export function maskBinary(binary: any[] | undefined | null) {
     return binary ? 'bytes [' + binary.length + ']' : binary
 }
+
+export function maskContentMD5(it: any | undefined | null) {
+    return it ? {...it, data: '['+it.data.length+']'} : it
+}
