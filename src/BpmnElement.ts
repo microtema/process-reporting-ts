@@ -1,5 +1,5 @@
-import {  BpmnElementOptions } from './index';
-import {descriptorFunction} from "./aop";
+import {  BpmnElementOptions } from './index'
+import {descriptorFunction} from './aop'
 
 export function BpmnElement(options: BpmnElementOptions): DecoratorFunction {
 
