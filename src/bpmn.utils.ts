@@ -12,7 +12,7 @@ export interface ProcessData  {
     eventTime: Date
 }
 
-const listProcesses = (fileDir = './bpmn') => {
+export const listProcesses = (fileDir = './bpmn') => {
 
    return fs.readdirSync(fileDir, {withFileTypes: true})
         .filter(item => item.name.endsWith('.bpmn'))
@@ -70,5 +70,3 @@ const getProcessData = (data:ProcessData):Promise<ProcessData> => {
         })
     })
 }
-
-export default listProcesses

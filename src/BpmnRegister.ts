@@ -1,5 +1,5 @@
 import axios from 'axios'
-import listProcesses, {ProcessData} from './bpmn.utils'
+import {listProcesses, ProcessData} from './bpmn.utils'
 
 function registerProcess() {
 

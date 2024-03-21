@@ -1,6 +1,6 @@
 {
   "name": "process-reporting-ts",
-  "version": "2.3.2",
+  "version": "2.4.4",
   "description": "Process reporting with typescript",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/microtema/process-reporting-ts#readme",
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/jest": "^29.5.8",
     "@types/mustache": "^4.2.5",
     "@types/uuid": "^9.0.7",
