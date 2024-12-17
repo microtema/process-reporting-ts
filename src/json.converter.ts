@@ -49,12 +49,17 @@ const inflateImpl =  (json:any, key:string, jsonPart:any) => {
 
                 const propName = postKey.substring(position.length+1)
                 const index = Number.parseInt(position)
+                const val = jsonPart[key]
 
-                _jsonPart[(propName)] = jsonPart[key]
+                let obj = val;
 
-                const obj = nestedObject[index] || {}
-
-                nestedObject[index] = obj
+                if(propName === '') {
+                    nestedObject[index] = val
+                }else {
+                    _jsonPart[(propName)] = val
+                    obj = nestedObject[index] || {}
+                    nestedObject[index] = obj
+                }
 
                 inflateImpl(obj, postKey, _jsonPart)
 
