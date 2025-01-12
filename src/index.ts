@@ -1,9 +1,11 @@
 import {BpmnElement} from './BpmnElement'
 import {maskPassword, maskBinary, maskContentMD5} from './util'
-import { BpmnElementOptions} from './models'
+import {listProcesses} from './bpmn.utils'
+import {BpmnElementOptions} from './models'
 import activityInterceptor from './aop'
 import processHeartBeatHandler from './ProcessHeartBeat'
 import jsonParser from './json.converter'
+import api from './api'
 
 export {
     BpmnElement,
@@ -13,5 +15,7 @@ export {
     maskBinary,
     maskContentMD5,
     processHeartBeatHandler,
-    jsonParser
+    jsonParser,
+    api,
+    listProcesses
 }

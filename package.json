@@ -1,6 +1,6 @@
 {
   "name": "process-reporting-ts",
-  "version": "2.5.0",
+  "version": "2.7.0",
   "description": "Process reporting with typescript",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "prepublish": "npm run build build"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
